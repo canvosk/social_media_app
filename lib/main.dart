@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:social_media_app/config/routes/routes.dart';
+import 'package:social_media_app/config/theme/app_theme.dart';
 
 void main() => runApp(const MyApp());
 
@@ -7,16 +10,17 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Material App',
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Material App Bar'),
-        ),
-        body: const Center(
-          child: Text('Hello World'),
-        ),
-      ),
-    );
+    return ScreenUtilInit(
+        designSize: const Size(375, 812),
+        minTextAdapt: true,
+        splitScreenMode: true,
+        builder: (_, context) {
+          return MaterialApp.router(
+            debugShowCheckedModeBanner: false,
+            routerConfig: routes,
+            title: 'Socially',
+            theme: theme(),
+          );
+        });
   }
 }
