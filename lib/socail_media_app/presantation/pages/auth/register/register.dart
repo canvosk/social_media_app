@@ -4,6 +4,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:social_media_app/config/theme/app_color.dart';
 import 'package:social_media_app/config/theme/text_styles.dart';
+import 'package:social_media_app/injection_container.dart';
+import 'package:social_media_app/socail_media_app/domain/entities/response_entity.dart';
+import 'package:social_media_app/socail_media_app/domain/usecases/auth_usecase.dart';
 import 'package:social_media_app/socail_media_app/presantation/widgets/my_text_field.dart';
 
 class RegisterPage extends StatelessWidget {
@@ -11,6 +14,10 @@ class RegisterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController usernameController = TextEditingController();
+    TextEditingController emailController = TextEditingController();
+    TextEditingController passwordController = TextEditingController();
+
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 32.w, vertical: 36.h),
       child: Column(
@@ -41,7 +48,7 @@ class RegisterPage extends StatelessWidget {
             shadowColor: AppColor.black,
             borderRadius: BorderRadius.circular(15.sp),
             child: MyTextField(
-              controller: TextEditingController(),
+              controller: usernameController,
               hintText: "username",
               obscureText: false,
               keyboardType: TextInputType.text,
@@ -60,7 +67,7 @@ class RegisterPage extends StatelessWidget {
             shadowColor: AppColor.black,
             borderRadius: BorderRadius.circular(15.sp),
             child: MyTextField(
-              controller: TextEditingController(),
+              controller: emailController,
               hintText: "email",
               obscureText: false,
               keyboardType: TextInputType.text,
@@ -81,7 +88,7 @@ class RegisterPage extends StatelessWidget {
             shadowColor: AppColor.black,
             borderRadius: BorderRadius.circular(15.sp),
             child: MyTextField(
-              controller: TextEditingController(),
+              controller: passwordController,
               hintText: "password",
               obscureText: true,
               keyboardType: TextInputType.text,
@@ -100,7 +107,16 @@ class RegisterPage extends StatelessWidget {
               width: 210.w,
               height: 48.h,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () async {
+                  ResponseEntity responseEntity =
+                      await AuthUseCase(sl()).register(
+                    username: usernameController.text,
+                    email: emailController.text,
+                    password: passwordController.text,
+                  );
+
+                  debugPrint(responseEntity.isSuccess.toString());
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColor.black,
                 ),
